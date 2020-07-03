@@ -30,6 +30,7 @@ export class HomeComponent implements OnInit {
     let datatable = [];
     datatable.push(["Country", "Cases"])
     this.globalData.forEach(cs=>{
+      if(cs.confirmed > 200000)
       datatable.push([
         cs.country, cs.confirmed
       ])
