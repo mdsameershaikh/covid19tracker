@@ -11,5 +11,39 @@
             </select>
         </div>
     </div>
-    <app-dashboardcard [totalConfirmed]='totalConfirmed' [totalActive]="totalActive" [totalDeaths]="totalDeaths" [totalRecovered]="totalRecovered"></app-dashboardcard>
+  
+  <app-dashboardcard [totalConfirmed]='totalConfirmed' [totalActive]="totalActive" [totalDeaths]="totalDeaths" [totalRecovered]="totalRecovered"></app-dashboardcard>
+
+
+
+<div class="card row">
+
+    <div class="col">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Sr.no</th>
+                    <th>Date</th>
+                    <th>Num of cases</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let cs of selectedCountryDateData, index as i">
+                   <td>{{i+1}}</td>
+                   <td>{{cs.date | date}}</td>
+                   <td>{{cs.cases}}</td> 
+                   
+                </tr>
+            </tbody>
+        </table>
+    </div>
+<div class="col">
+    <google-chart [data]='lineChart'></google-chart>
 </div>
+
+   
+</div>
+
+
+</div>
+

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
 import { map } from 'rxjs/operators'
 import { GlobalDataSumarry } from '../model/globalData';
+import { DateWiseData } from '../model/dateWiseData';
 
 
 @Injectable({
@@ -9,8 +10,45 @@ import { GlobalDataSumarry } from '../model/globalData';
 })
 export class DataServicesService {
 
-  private Globaldataurl = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/07-01-2020.csv`
+  private Globaldataurl = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/07-02-2020.csv`
+  private dateWiseUrl = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv`
+  
   constructor(private http: HttpClient) { }
+
+  getDateWiseData(){
+    return this.http.get(this.dateWiseUrl, {responseType: "text"})
+    .pipe(map(result =>{
+      let  rows = result.split('\n');
+      //console.log(rows);
+      let mainaData = {}
+      let header = rows[0];
+      let dates = header.split(/,(?=\S)/);
+      dates.splice(0 , 4);
+      rows.splice(0 , 1)
+      
+      rows.forEach(row=>{
+        let cols =  row.split(/,(?=\S)/);
+        let con = cols[1];
+        cols.splice(0 , 4);
+       // console.log(con, cols);
+        mainaData[con] =[0]
+        cols.forEach((value, index)=>{
+          let dw: DateWiseData ={
+            cases: +value, 
+            country: con,
+            date : new Date(Date.parse(dates[index]))
+
+          }
+        mainaData[con].push(dw)
+        })
+      })
+      
+     // console.log(mainaData);
+      
+      return mainaData
+    }))
+
+  }
 
   getGlobalData(){
     return this.http.get(this.Globaldataurl, {responseType: 'text'}).pipe(
@@ -40,6 +78,7 @@ export class DataServicesService {
             temp.recovered = cs.recovered + temp.recovered
 
             raw[cs.country] = temp;
+           
             
             
           }

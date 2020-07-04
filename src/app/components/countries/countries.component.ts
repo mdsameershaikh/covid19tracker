@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DataServicesService } from 'src/app/services/data-services.service';
 import{GlobalDataSumarry} from 'src/app/model/globalData'
+import { DateWiseData } from 'src/app/model/dateWiseData';
+import { GoogleChartComponent, GoogleChartInterface } from 'ng2-google-charts';
 
 
 @Component({
@@ -13,12 +15,23 @@ export class CountriesComponent implements OnInit {
   totalActive;
   totalDeaths;
   totalRecovered;
-
+  dateWiseData;
+  selectedCountryDateData: DateWiseData [];
  data: GlobalDataSumarry[];
  countries: string[]= [];
+ lineChart: GoogleChartInterface ={
+   chartType: 'lineChart' 
+ }
   constructor(private service: DataServicesService) { }
 
   ngOnInit(): void {
+
+    this.service.getDateWiseData().subscribe(result=>{
+      console.log(result);
+      this.dateWiseData = result
+      this.updateChart();
+      
+    })
     this.service.getGlobalData().subscribe(result=>{
       this.data = result;
       this.data.forEach(cs=>{
@@ -27,6 +40,26 @@ export class CountriesComponent implements OnInit {
     }
       )
   }
+
+ updateChart(){
+   let dataTable = [];
+   dataTable.push(['date' , 'cases'])
+   this.selectedCountryDateData.forEach(cs=>{
+     dataTable.push([cs.date, cs.cases])})
+     this.lineChart = {
+       chartType: "linechart", 
+
+       options: {hieght: 500},
+     }
+    
+
+  } 
+
+
+
+
+
+
 
   updateValues(country: string){
     console.log(country);
@@ -38,6 +71,8 @@ export class CountriesComponent implements OnInit {
         this.totalRecovered = cs.recovered
       }
     })
-
+     this.selectedCountryDateData = this.dateWiseData[country]
+     //console.log(this.selectedCountryDateData);
+     this.updateChart()
   }
 }

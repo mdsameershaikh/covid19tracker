@@ -4,13 +4,53 @@
     <app-dashboardcard [totalConfirmed]='totalConfirmed' [totalActive]="totalActive" [totalDeaths]="totalDeaths" [totalRecovered]="totalRecovered"></app-dashboardcard>
 </div>
 <hr>
+
+
+<div class="ui form">
+    <div class="inline fields">
+      <label for="fruit">Select case type:</label>
+      <div class="field">
+        <div class="ui radio checkbox">
+          <input type="radio" value="c" id="c"  #c 
+          name="casetype" checked="" tabindex="0" class="hidden" (click)='updateChart(c)' >
+          <label for="c">Confirmend</label>
+        </div>
+      </div>
+      <div class="field">
+        <div class="ui radio checkbox">
+          <input type="radio"  value="d" #d  id="d" name="casetype" tabindex="0" class="hidden" (click)='updateChart(d)'   >
+          <label for="d">Deaths</label>
+        </div>
+      </div>
+      <div class="field">
+        <div class="ui radio checkbox">
+          <input type="radio" value="r"  #r id="r" name="casetype" tabindex="0" class="hidden" (click)='updateChart(r)' >
+          <label for="r" >Recovered</label>
+        </div>
+      </div>
+      <div class="field">
+        <div class="ui radio checkbox">
+          <input type="radio" value="a"  #a id="a" name="casetype" tabindex="0" class="hidden" (click)='updateChart(a)' >
+          <label for="a">Active</label>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
 <div class="row">
+    <div class="col">
+      
+        <google-chart [data]="ColumnChart"></google-chart>
+    </div>
+
     <div class="col">
         <google-chart [data]="pieChart"></google-chart>
     </div>
-
-    <div class="col">
-        <google-chart [data]="ColumnChart"></google-chart>
-    </div>
 </div>
 
+<hr>
+
+<div class="col">
+  <iframe width="500" height="280" src="https://www.youtube-nocookie.com/embed/1mKITi1D0p0" frameborder="5" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>

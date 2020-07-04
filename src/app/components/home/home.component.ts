@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataServicesService } from 'src/app/services/data-services.service';
 import { Observable} from 'rxjs'
 import { GlobalDataSumarry } from 'src/app/model/globalData';
+//import { GoogleChartInterface } from 'ng2-google-charts';
 import { GoogleChartInterface } from 'ng2-google-charts';
 
 @Component({
@@ -26,13 +27,30 @@ export class HomeComponent implements OnInit {
  
   constructor(private dataService: DataServicesService) { }
 
-  initChart(){
+  initChart(caseType: String){
     let datatable = [];
     datatable.push(["Country", "Cases"])
     this.globalData.forEach(cs=>{
-      if(cs.confirmed > 200000)
+      let value: number;
+      if(caseType == 'c') {
+      if(cs.confirmed > 20000)
+      value= cs.confirmed }
+
+         if(caseType == 'a')
+         if(cs.active > 20000)
+         value = cs.active 
+       
+       if(caseType == 'd')
+      if(cs.deaths > 10000)
+      value = cs.deaths
+      
+      if(caseType == 'r')
+      if(cs.recovered > 20000)
+      value = cs.recovered
+      
+
       datatable.push([
-        cs.country, cs.confirmed
+        cs.country, value
       ])
     })
 
@@ -59,7 +77,7 @@ export class HomeComponent implements OnInit {
 
     this.dataService.getGlobalData().subscribe({
       next: (result)=>{
-     console.log(result);
+    
       this.globalData = result; 
      result.forEach(cs=>{
       if(!Number.isNaN(cs.confirmed)){
@@ -68,9 +86,13 @@ export class HomeComponent implements OnInit {
      this.totalDeaths +=cs.deaths
      this.totalRecovered +=cs.recovered}
      })
-       this.initChart();
+       this.initChart('c');
       }
     })
   }
   
+  updateChart(input: HTMLInputElement){
+ console.log(input.value);
+ this.initChart(input.value)
+  }
 }
