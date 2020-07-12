@@ -10,7 +10,7 @@ import { DateWiseData } from '../model/dateWiseData';
 })
 export class DataServicesService {
 
-  private Globaldataurl = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/07-02-2020.csv`
+  private Globaldataurl = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports/07-11-2020.csv`
   private dateWiseUrl = `https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv`
   
   constructor(private http: HttpClient) { }

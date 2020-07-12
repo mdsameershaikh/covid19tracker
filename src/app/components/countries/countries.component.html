@@ -1,3 +1,8 @@
+
+<div class="ui inverted dimmer" [class.active]="loading">
+    <div class="ui text loader">Loading</div>
+</div>
+
 <div class="jumbotron bg-white text-center">
     <h1 class="display-4">covid-19 tracker country wise</h1>
     <hr>
@@ -16,8 +21,10 @@
 
 
 
-<div class="card row">
-
+<div class="row">
+    <div class="col">
+        <google-chart [data]='lineChart'></google-chart>
+    </div>
     <div class="col">
         <table class="table">
             <thead>
@@ -28,7 +35,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let cs of selectedCountryDateData, index as i">
+                <tr *ngFor="let cs of selectedCountryData, index as i">
                    <td>{{i+1}}</td>
                    <td>{{cs.date | date}}</td>
                    <td>{{cs.cases}}</td> 
@@ -36,10 +43,11 @@
                 </tr>
             </tbody>
         </table>
+
+      
+       
     </div>
-<div class="col">
-    <google-chart [data]='lineChart'></google-chart>
-</div>
+
 
    
 </div>

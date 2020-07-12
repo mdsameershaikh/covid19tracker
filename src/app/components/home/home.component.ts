@@ -15,6 +15,7 @@ export class HomeComponent implements OnInit {
  totalActive =0;
  totalDeaths = 0;
  totalRecovered = 0;
+ loading:Boolean = true;
  globalData : GlobalDataSumarry [] ;
  pieChart: GoogleChartInterface ={
   chartType: 'PieChart'
@@ -59,7 +60,11 @@ export class HomeComponent implements OnInit {
       dataTable: datatable,
 
       //firstRowIsData: true,
-      options: {height : 600},
+      options: {height : 600,
+        animation:{
+          duration: 1000, 
+          easing: 'out'
+        }},
     };
 
     this.ColumnChart ={
@@ -67,7 +72,11 @@ export class HomeComponent implements OnInit {
       dataTable: datatable,
 
       //firstRowIsData: true,
-      options: {height : 600},
+      options: {height : 600,
+        animation:{
+          duration: 1000, 
+          easing: 'out'
+        }},
     }
 
   }
@@ -79,6 +88,7 @@ export class HomeComponent implements OnInit {
       next: (result)=>{
     
       this.globalData = result; 
+      this.loading = false
      result.forEach(cs=>{
       if(!Number.isNaN(cs.confirmed)){
      this.totalActive +=cs.active

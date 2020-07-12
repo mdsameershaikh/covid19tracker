@@ -3,6 +3,8 @@ import { DataServicesService } from 'src/app/services/data-services.service';
 import{GlobalDataSumarry} from 'src/app/model/globalData'
 import { DateWiseData } from 'src/app/model/dateWiseData';
 import { GoogleChartComponent, GoogleChartInterface } from 'ng2-google-charts';
+import { merge } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 
 @Component({
@@ -16,49 +18,61 @@ export class CountriesComponent implements OnInit {
   totalDeaths;
   totalRecovered;
   dateWiseData;
-  selectedCountryDateData: DateWiseData [];
+  loading: Boolean = true;
+  selectedCountryData: DateWiseData [];
  data: GlobalDataSumarry[];
  countries: string[]= [];
  lineChart: GoogleChartInterface ={
-   chartType: 'lineChart' 
+   chartType: 'LineChart' 
  }
   constructor(private service: DataServicesService) { }
 
   ngOnInit(): void {
 
-    this.service.getDateWiseData().subscribe(result=>{
-      console.log(result);
-      this.dateWiseData = result
-      this.updateChart();
-      
-    })
-    this.service.getGlobalData().subscribe(result=>{
-      this.data = result;
-      this.data.forEach(cs=>{
-      this.countries.push(cs.country)
-      })
-    }
+
+    merge(
+      this.service.getDateWiseData().pipe(
+        map(result =>{
+          this.dateWiseData = result 
+        })
+      ),
+      this.service.getGlobalData().pipe(
+        map(result=>{     
+          this.data = result;
+          this.data.forEach(cs =>{
+          this.countries.push(cs.country)
+        }) })
       )
+    ).subscribe({
+      complete: ()=>{
+        this.updateValues('India')
+        this.loading = false;
+      }
+    })
+
+    
   }
 
  updateChart(){
    let dataTable = [];
-   dataTable.push(['date' , 'cases'])
-   this.selectedCountryDateData.forEach(cs=>{
+   dataTable.push(['Date' , 'Cases'])
+   this.selectedCountryData.forEach(cs=>{
      dataTable.push([cs.date, cs.cases])})
      this.lineChart = {
-       chartType: "linechart", 
+       chartType: "Linechart", 
+      dataTable: dataTable,
+       options: {hieght: 500,
+      animation:{
+        duration: 1000, 
+        easing: 'out'
+      }
+      
+      },
 
-       options: {hieght: 500},
      }
     
 
   } 
-
-
-
-
-
 
 
   updateValues(country: string){
@@ -71,7 +85,7 @@ export class CountriesComponent implements OnInit {
         this.totalRecovered = cs.recovered
       }
     })
-     this.selectedCountryDateData = this.dateWiseData[country]
+     this.selectedCountryData = this.dateWiseData[country]
      //console.log(this.selectedCountryDateData);
      this.updateChart()
   }
