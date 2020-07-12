@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { Ng2GoogleChartsModule, GoogleChartsSettings } from 'ng2-google-charts';
+import { GoogleChartsModule } from 'angular-google-charts';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -25,7 +25,8 @@ import { DashboardcardComponent } from './components/dashboardcard/dashboardcard
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    Ng2GoogleChartsModule
+    GoogleChartsModule
+    
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataServicesService } from 'src/app/services/data-services.service';
-import { Observable} from 'rxjs'
 import { GlobalDataSumarry } from 'src/app/model/globalData';
-//import { GoogleChartInterface } from 'ng2-google-charts';
-import { GoogleChartInterface } from 'ng2-google-charts';
+
 
 @Component({
   selector: 'app-home',
@@ -17,21 +15,31 @@ export class HomeComponent implements OnInit {
  totalRecovered = 0;
  loading:Boolean = true;
  globalData : GlobalDataSumarry [] ;
- pieChart: GoogleChartInterface ={
-  chartType: 'PieChart'
+ datatable = [];
+ chart ={
+   PieChart: "PieChart",
+   ColumnChart: "ColumnChart",
+   height : 600,
+   options: {
+    animation:{
+      duration: 1000, 
+      easing: 'out'
+    },
+    is3D: true
+  }
  }
-
- ColumnChart: GoogleChartInterface ={
-  chartType: 'ColumnChart'
- }
-
  
   constructor(private dataService: DataServicesService) { }
 
+
+  updateChart(input: HTMLInputElement){
+    console.log(input.value);
+    this.initChart(input.value)
+     }
   initChart(caseType: String){
-    let datatable = [];
-    datatable.push(["Country", "Cases"])
-    this.globalData.forEach(cs=>{
+    this.datatable = [];
+   // this.datatable.push(["Country", "Cases"])
+    this.globalData.forEach(cs =>{
       let value: number;
       if(caseType == 'c') {
       if(cs.confirmed > 20000)
@@ -50,37 +58,20 @@ export class HomeComponent implements OnInit {
       value = cs.recovered
       
 
-      datatable.push([
+      this.datatable.push([
         cs.country, value
       ])
     })
 
-    this.pieChart = {
-      chartType: 'PieChart',
-      dataTable: datatable,
-
-      //firstRowIsData: true,
-      options: {height : 600,
-        animation:{
-          duration: 1000, 
-          easing: 'out'
-        }},
+    console.log(this.datatable);
+    
+     
     };
 
-    this.ColumnChart ={
-      chartType: 'ColumnChart',
-      dataTable: datatable,
+   
 
-      //firstRowIsData: true,
-      options: {height : 600,
-        animation:{
-          duration: 1000, 
-          easing: 'out'
-        }},
-    }
-
-  }
-  ngOnInit(): void {
+  
+    ngOnInit(): void {
 
   
 
@@ -101,8 +92,5 @@ export class HomeComponent implements OnInit {
     })
   }
   
-  updateChart(input: HTMLInputElement){
- console.log(input.value);
- this.initChart(input.value)
-  }
+  
 }
